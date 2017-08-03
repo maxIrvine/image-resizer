@@ -1,8 +1,23 @@
 const fs = require('fs');
-
+const readline = require('readline');
+const https = require('https');
+const gm = require('gm');
 var request = require('request');
-request('http://www.google.com', function (error, response, body) {
-  console.log('error:', error); // Print the error if one occurred 
-  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
-  console.log('body:', body); // Print the HTML for the Google homepage. 
+
+
+const rl = readline.createInterface ({
+        input: process.stdin,
+        output: process.stdout
+});
+
+
+rl.question("Domain name: ", (domain) => {
+      rl.close();
+      request(domain).pipe(fs.createWriteStream('JavaScript.png'));
+      
+      gm('JavaScript.png')
+      .resize(240, 240, '!')
+      .write('resize.png', function (err) {
+        if (!err) console.log('done');
+      });
 });
